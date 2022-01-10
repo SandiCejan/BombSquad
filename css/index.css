@@ -1,0 +1,184 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #a7c53f;
+    background: url(../img/grass1.jpg) repeat center center fixed;
+    font-family: sans-serif;
+    color: aliceblue;
+}
+
+#maze_container {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50px);
+    text-align: center;
+    width: 990px;
+    height: 750px;
+}
+
+.swal2-styled {
+    border: 0;
+    border-radius: 0.25em;
+    background: initial;
+    background-color: #3085d6;
+    color: #fff;
+    font-size: 1.0625em;
+}
+
+#swal2-content {
+    color: white;
+    font-family: sans-serif;
+}
+
+#swal2-title {
+    color: white;
+    font-family: sans-serif;
+}
+
+#mazeTimeContainer {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 90%);
+    text-align: center;
+    width: 200px;
+    height: 50px;
+}
+
+#Time {
+    text-align: center;
+    margin: 0;
+    flex: 5;
+}
+
+.swal2-popup {
+    background-color: #a7c53f;
+    font-family: sans-serif;
+}
+
+#finish {
+    position: absolute;
+    font-family: monospace;
+    font-size: 5em;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    z-index: 10;
+    margin: auto;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, 200%);
+}
+
+#More {
+    flex: 5;
+}
+
+#newB {
+    border: 0;
+    border-radius: 0.25em;
+    background: initial;
+    color: #fff;
+    font-size: 25px;
+    background-color: #255109;
+    border-left-color: rgb(0, 128, 0);
+    border-right-color: rgb(0, 128, 0);
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+#left {
+    position: absolute;
+    transform: translate(0%, 100%);
+    width: 100px;
+    height: 300px;
+}
+
+.leftB {
+    height: 100px;
+    width: 100px;
+    margin: 0;
+}
+
+#soundB {
+    border: 0;
+    background-position: center center;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 80px;
+}
+
+#soundB:hover {
+    background-color: rgb(0 185 57 / 30%);
+}
+
+#regenerateB {
+    border: 0;
+    background: url('../img/regenerate.png') center center;
+    background-repeat: no-repeat;
+    background-size: 80px;
+    background-color: transparent;
+}
+
+#regenerateB:hover {
+    background-color: rgb(0 185 57 / 30%);
+}
+
+#resetB {
+    border: 0;
+    background-color: transparent;
+    background: url('../img/refresh.png') center center;
+    background-repeat: no-repeat;
+    background-size: 80px;
+}
+
+#resetB:hover {
+    background-color: rgb(0 185 57 / 30%);
+}
+
+#waittostart {
+    position: absolute;
+    font-family: monospace;
+    font-size: 5em;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    z-index: 10;
+    margin: auto;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, 200%);
+}
+
+@media(max-width: 1190px) {
+    #maze div div:nth-child(odd) {
+        width: 20px;
+    }
+    #maze div:nth-child(odd) div {
+        height: 20px;
+    }
+    #maze div div {
+        width: 20px;
+    }
+    #maze_container {
+        width: 660px;
+    }
+}
+
+@media(max-height: 900px) {
+    #maze_container {
+        height: 500px;
+    }
+    #maze div div {
+        height: 20px;
+    }
+}
+
+@media(max-width: 900px) {
+    #left {
+        position: absolute;
+        bottom: 20px;
+        width: 310px;
+        height: 100px;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+}

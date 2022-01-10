@@ -1,0 +1,140 @@
+#maze_container {
+    position: relative;
+    display: inline-block;
+}
+
+#maze {
+    position: relative;
+    background-color: #a7c53f;
+    background-image: url('../img/grass1.jpg');
+    background-size: 8em 8em;
+}
+
+#maze div {
+    display: flex;
+}
+
+#maze div div {
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+#maze div div::after {
+    position: absolute;
+    left: -3px;
+    top: -4px;
+    text-align: center;
+    text-shadow: 0 0 1px black;
+    font-size: 1.2em;
+    z-index: 10;
+}
+
+#maze div div.door.exit {
+    background-image: url('../img/grandma2.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+#maze div div.nubbin::after {
+    content: "\1F33C";
+}
+
+#maze div.nubbin:nth-of-type(3n)::after {
+    content: "\1F344";
+}
+
+#maze div.nubbin:nth-of-type(5n)::after {
+    content: "\1F33B";
+}
+
+#maze div.nubbin:nth-of-type(7n)::after {
+    content: "\1F48E";
+}
+
+#maze div.nubbin:nth-of-type(13n)::after {
+    content: "\1F381";
+}
+
+#maze div.hero {
+    background-image: url('../img/man.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+#maze.face-right div.hero::after {
+    transform: scale(-1, 1);
+}
+
+#maze div div.wall,
+#maze div div.nubbin.wall {
+    background-image: url('../img/wall.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#maze div div.nubbin.wall::after {
+    content: "";
+}
+
+#maze div div.sentinel.wall {
+    background: transparent;
+}
+
+#maze div div.sentinel.wall::after {
+    content: "\1F40A";
+}
+
+#maze div.sentinel.wall:nth-of-type(3n)::after {
+    content: "\1F40D";
+}
+
+#maze div div.key {
+    background-image: url('../img/Code.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+#maze div div:nth-child(odd) {
+    width: 30px;
+}
+
+#maze div:nth-child(odd) div {
+    height: 30px;
+}
+
+#maze.finished::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9;
+}
+
+#maze_output {
+    display: flex;
+    margin: 0.5em auto;
+}
+
+#maze_score {
+    flex: 1;
+    white-space: nowrap;
+    text-align: left;
+}
+
+#maze_score::before {
+    content: "Steps: ";
+}
+
+#maze_score.has-key::after {
+    background-color: #a7c53f;
+}
+
+#maze_message {
+    flex: 2;
+    text-align: right;
+}

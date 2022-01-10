@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BOMB SQUAD</title>
+    <link rel="stylesheet" type="text/css" href="css/mazing.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="js/maze-builder.js"></script>
+    <script src="js/mazing.js"></script>
+    <link rel="shortcut icon" href="img/grandma2.png" type="image/png">
+</head>
+
+<body>
+    <div id="maze_container">
+    </div>
+    <div id="finish" style="display: none;">
+        GAME OVER</br>
+        <button id="newB" onclick="regenerate();document.getElementById('finish').style.display = 'none'">New game</button>
+    </div>
+    <div id="waittostart" style="display: none;">
+        CLICK TO START</br>
+    </div>
+    <div id="left">
+        <button id="soundB" class="leftB" onclick="mute()" style="background-image: url('img/soundOK.png');"></button>
+        <button id="regenerateB" class="leftB" onclick="regenerate()"></button>
+        <button id="resetB" class="leftB" onclick="endGame();startGame();"></button>
+    </div>
+    <script>
+        var MusicSound;
+        var TimeSound = new sound("audio/TimerOK.mp3");
+        var TimeWarningSound = new sound("audio/TimerWarning.mp3");
+        var TimeLastSound = new sound("audio/TimerLast.mp3");
+        var ExplosionSound = new sound("audio/Explosion.mp3");
+        var ClapsSound = new sound("audio/Claps.mp3");
+        var x;
+        let Maze = new MazeBuilder(16, 12);
+        Maze.placeKey();
+        Maze.display("maze_container");
+        var maze;
+        window.addEventListener("DOMContentLoaded", function(e) {
+            maze = new Mazing("maze");
+            /*  maze.setChildMode(); */
+        }, false);
+        var muted = false;
+        ShowHello();
+
+        function muteMe(elem, mute) {
+            elem.muted = mute;
+        }
+
+        function mute() {
+            if (muted) {
+                muted = false
+                document.getElementsByTagName("audio").muted = false;
+                var elems = document.querySelectorAll("audio");
+                [].forEach.call(elems, function(elem) {
+                    muteMe(elem, false);
+                });
+                document.getElementById("soundB").style.backgroundImage = "url('img/soundOK.png')";
+            } else {
+                muted = true
+                document.getElementsByTagName("audio").muted = true;
+                var elems = document.querySelectorAll("audio");
+                [].forEach.call(elems, function(elem) {
+                    muteMe(elem, true);
+                });
+                document.getElementById("soundB").style.backgroundImage = "url('img/soundNO.png')";
+            }
+        }
+
+        function startGame() {
+            try {
+                maze.maze[maze.heroPos].classList.remove("hero");
+                maze.heroHasKey = false;
+                for (i = 0; i < maze.mazeContainer.children.length; i++) {
+                    for (j = 0; j < maze.mazeContainer.children[i].children.length; j++) {
+                        var el = maze.mazeContainer.children[i].children[j];
+                        maze.maze[new Position(i, j)] = el;
+                        if (el.classList.contains("entrance")) {
+                            maze.heroPos = new Position(i, j);
+                            maze.maze[maze.heroPos].classList.add("hero");
+                        }
+                    }
+                }
+                maze.mazeScore.innerHTML = maze.heroScore;
+                ClapsSound.stop();
+            } catch (error) {
+
+            }
+            ClapsSound = new sound("audio/Claps.mp3");
+            MusicSound = new sound("audio/Music.mp3");
+            MusicSound.play();
+            var time = 119;
+            var now = 0;
+            x = setInterval(function() {
+                var distance = time - now;
+                now++;
+
+                var minutes = Math.floor(distance / 60);
+                var seconds = Math.floor(distance % 60);
+
+                document.getElementById("Time").innerHTML = "Detonation in:" + minutes + "m " + seconds + "s ";
+                if (distance < 11) {
+                    if (distance < 3) {
+                        if (distance == -1) {
+                            endGame();
+                            document.getElementById("Time").innerHTML = "EXPIRED";
+                            ExplosionSound.play();
+                            Swal.fire({
+                                title: "THE BOMB WENT KABOOM",
+                                text: "Mission failed, you are dead. Try running faster!",
+                                confirmButtonText: "Try again",
+                                confirmButtonColor: 'green',
+                            }).then((result) => {
+                                startGame();
+                            })
+                            $(".swal2-modal").css('background-color', 'rgb(59 108 0)');
+                        } else {
+                            TimeLastSound.play();
+                        }
+                    } else {
+                        TimeWarningSound.play();
+                    }
+                } else {
+                    TimeSound.play();
+                }
+
+            }, 1000);
+        }
+
+        function ShowHello() {
+            const href = $(this).attr('href')
+            Swal.fire({
+                title: "<h5 style='color:white'>WELCOME TO THE BOMB SQUAD</h5>",
+                text: "The mission is simple. Get the code, disable the bomb and get there before the time runs out. Think fast and be fast. Are you ready?",
+                confirmButtonText: "Yeah!",
+                confirmButtonColor: 'green',
+            }).then((result) => {
+                startGame();
+            })
+        }
+
+        function endGame() {
+            clearInterval(x);
+            maze.heroScore = 0;
+            MusicSound.stop();
+        }
+
+        function regenerate() {
+            document.getElementById('maze').remove();
+            document.getElementById('maze_output').remove();
+            endGame();
+            Maze = new MazeBuilder(16, 12);
+            Maze.placeKey();
+            Maze.display("maze_container");
+            maze = new Mazing("maze");
+            startGame();
+        }
+        $(".swal2-modal").css('background-color', 'rgb(59 108 0)');
+
+        function sound(src) {
+            this.sound = document.createElement("audio");
+            this.sound.src = src;
+            this.sound.setAttribute("preload", "auto");
+            this.sound.setAttribute("controls", "none");
+            this.sound.style.display = "none";
+            this.sound.setAttribute("allow", "autoplay");
+            document.body.appendChild(this.sound);
+            this.play = function() {
+                this.sound.play();
+            }
+            this.stop = function() {
+                this.sound.pause();
+            }
+        }
+    </script>
+</body>
+
+</html>
