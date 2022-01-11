@@ -31,7 +31,7 @@
 }
 
 #maze div div.door.exit {
-    background-image: url('../img/grandma2.png');
+    background-image: url('../img/bomb.png');
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -57,7 +57,7 @@
 }
 
 #maze div.hero {
-    background-image: url('../img/man.png');
+    background-image: url('../img/soldier.png');
     background-size: 100%;
     background-repeat: no-repeat;
 }
