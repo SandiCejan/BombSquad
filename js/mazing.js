@@ -48,7 +48,7 @@ function Mazing(id) {
     container2.id = "More";
     const Timep = document.createElement("p");
     Timep.id = "Time";
-    Timep.innerHTML = "Detonation in:2m 0s ";
+    Timep.innerHTML = "Detonation in:2m 0s";
     mazeOutputDiv.appendChild(container2);
     container2.appendChild(Timep);
     mazeOutputDiv.appendChild(this.mazeMessage);
@@ -62,11 +62,6 @@ function Mazing(id) {
     document.addEventListener("keydown", this.keyPressHandler, false);
 };
 
-Mazing.prototype.enableSpeech = function() {
-    this.utter = new SpeechSynthesisUtterance()
-    this.setMessage(this.mazeMessage.innerText);
-};
-
 Mazing.prototype.setMessage = function(text) {
     this.mazeMessage.innerHTML = text;
     this.mazeScore.innerHTML = this.heroScore;
@@ -75,11 +70,6 @@ Mazing.prototype.setMessage = function(text) {
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(this.utter);
     }
-};
-
-Mazing.prototype.heroTakeTreasure = function() {
-    this.maze[this.heroPos].classList.remove("nubbin");
-    this.setMessage("yay, treasure!");
 };
 
 Mazing.prototype.heroTakeKey = function() {
@@ -175,10 +165,4 @@ Mazing.prototype.mazeKeyPressHandler = function(e) {
     }
     this.tryMoveHero(tryPos);
     e.preventDefault();
-};
-
-Mazing.prototype.setChildMode = function() {
-    this.childMode = true;
-    this.heroScore = 0;
-    this.setMessage("collect all the treasure");
 };
