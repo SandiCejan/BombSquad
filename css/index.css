@@ -4,7 +4,7 @@ body {
     padding: 0;
     background-color: #a7c53f;
     background: url(../img/grass1.jpg) repeat center center fixed;
-    font-family: sans-serif;
+    font-family: cursive;
     color: aliceblue;
 }
 
@@ -89,13 +89,13 @@ body {
 #left {
     position: absolute;
     transform: translate(0%, 100%);
-    width: 100px;
-    height: 300px;
+    width: 60px;
+    height: 130px;
 }
 
 .leftB {
-    height: 100px;
-    width: 100px;
+    height: 60px;
+    width: 60px;
     margin: 0;
 }
 
@@ -104,7 +104,7 @@ body {
     background-position: center center;
     background-color: transparent;
     background-repeat: no-repeat;
-    background-size: 80px;
+    background-size: 50px;
 }
 
 #soundB:hover {
@@ -115,7 +115,7 @@ body {
     border: 0;
     background: url('../img/regenerate.png') center center;
     background-repeat: no-repeat;
-    background-size: 80px;
+    background-size: 50px;
     background-color: transparent;
 }
 
@@ -148,6 +148,11 @@ body {
     transform: translate(-50%, 200%);
 }
 
+.Bottom {
+    margin: 5px 0;
+    display: flex;
+}
+
 @media(max-width: 1190px) {
     #maze div div:nth-child(odd) {
         width: 20px;
@@ -176,8 +181,8 @@ body {
     #left {
         position: absolute;
         bottom: 20px;
-        width: 310px;
-        height: 100px;
+        width: 130px;
+        height: 60px;
         left: 50%;
         transform: translate(-50%, 0);
     }

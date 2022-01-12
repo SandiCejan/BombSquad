@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="js/maze-builder.js"></script>
     <script src="js/mazing.js"></script>
-    <link rel="shortcut icon" href="img/bomb.png" type="image/png">
+    <link rel="shortcut icon" href="img/bomb1.png" type="image/png">
 </head>
 
 <body>
@@ -17,23 +17,24 @@
     </div>
     <div id="finish" style="display: none;">
         GAME OVER</br>
-        <button id="newB" onclick="regenerate();document.getElementById('finish').style.display = 'none'">New game</button>
+        <button id="newB" onclick="now = 20;Level = 0;regenerate();startGame();document.getElementById('finish').style.display = 'none'">New
+            game</button>
     </div>
     <div id="waittostart" style="display: none;">
         CLICK TO START</br>
     </div>
     <div id="left">
         <button id="soundB" class="leftB" onclick="mute()" style="background-image: url('img/soundOK.png');"></button>
-        <button id="regenerateB" class="leftB" onclick="regenerate()"></button>
-        <button id="resetB" class="leftB" onclick="endGame();startGame();"></button>
+        <button id="regenerateB" class="leftB" onclick="now = 30;Level = 0;endGame();regenerate();startGame();"></button>
     </div>
     <script>
         var MusicSound;
-        var TimeSound = new sound("audio/TimerOK.mp3");
-        var TimeWarningSound = new sound("audio/TimerWarning.mp3");
-        var TimeLastSound = new sound("audio/TimerLast.mp3");
-        var ExplosionSound = new sound("audio/Explosion.mp3");
-        var ClapsSound = new sound("audio/Claps.mp3");
+        var TimeSound = new sound("audio/TimerOK.mp3", false);
+        var TimeWarningSound = new sound("audio/TimerWarning.mp3", false);
+        var TimeLastSound = new sound("audio/TimerLast.mp3", false);
+        var ExplosionSound = new sound("audio/Explosion.mp3", false);
+        var ClapsSound = new sound("audio/Claps.mp3", false);
+        var StringOnFire = new sound("audio/StringOnFire.mp3", true);
         var x;
         let Maze = new MazeBuilder(16, 12);
         Maze.placeKey();
@@ -42,6 +43,8 @@
         window.addEventListener("DOMContentLoaded", function(e) {
             maze = new Mazing("maze");
             /*  maze.setChildMode(); */
+            document.getElementById("maze_timer").innerHTML = "Detonation in:2m 0s ";
+
         }, false);
         var muted = false;
         ShowHello();
@@ -69,31 +72,16 @@
                 document.getElementById("soundB").style.backgroundImage = "url('img/soundNO.png')";
             }
         }
+        var now = 0;
+        var Level = 1;
 
         function startGame() {
-            try {
-                maze.maze[maze.heroPos].classList.remove("hero");
-                maze.heroHasKey = false;
-                for (i = 0; i < maze.mazeContainer.children.length; i++) {
-                    for (j = 0; j < maze.mazeContainer.children[i].children.length; j++) {
-                        var el = maze.mazeContainer.children[i].children[j];
-                        maze.maze[new Position(i, j)] = el;
-                        if (el.classList.contains("entrance")) {
-                            maze.heroPos = new Position(i, j);
-                            maze.maze[maze.heroPos].classList.add("hero");
-                        }
-                    }
-                }
-                maze.mazeScore.innerHTML = maze.heroScore;
-                ClapsSound.stop();
-            } catch (error) {
-
-            }
-            ClapsSound = new sound("audio/Claps.mp3");
-            MusicSound = new sound("audio/Music.mp3");
+            document.getElementById("maze_timer").innerHTML = "Detonation in:2m 0s ";
+            StringOnFire.play();
+            ClapsSound = new sound("audio/Claps.mp3", false);
+            MusicSound = new sound("audio/Music.mp3", true);
             MusicSound.play();
             var time = 119;
-            var now = 0;
             x = setInterval(function() {
                 var distance = time - now;
                 now++;
@@ -101,19 +89,23 @@
                 var minutes = Math.floor(distance / 60);
                 var seconds = Math.floor(distance % 60);
 
-                document.getElementById("Time").innerHTML = "Detonation in:" + minutes + "m " + seconds + "s ";
+                document.getElementById("maze_timer").innerHTML = "Detonation in:" + minutes + "m " + seconds + "s ";
                 if (distance < 11) {
                     if (distance < 3) {
                         if (distance == -1) {
                             endGame();
-                            document.getElementById("Time").innerHTML = "EXPIRED";
+                            document.getElementById("maze_timer").innerHTML = "EXPIRED";
                             ExplosionSound.play();
+                            StringOnFire.stop();
                             Swal.fire({
                                 title: "THE BOMB WENT KABOOM",
-                                text: "Mission failed, you are dead. Try running faster!",
+                                text: (Level == 1 ? "You didn't even try. Why are you still here?" : "You were able to deactivate " + (Level - 1 > 1 ? Level + " bombs" : "1 bomb") + ". " + (Level > 5 ? (Level > 13 ? "Just go to army, you are a natural talent!" : "Greate job out there, I am surprised!") : "Good job, but try to do it better!")),
                                 confirmButtonText: "Try again",
                                 confirmButtonColor: 'green',
                             }).then((result) => {
+                                now = 20;
+                                Level = 0;
+                                regenerate();
                                 startGame();
                             })
                             $(".swal2-modal").css('background-color', 'rgb(59 108 0)');
@@ -150,23 +142,43 @@
 
         function regenerate() {
             document.getElementById('maze').remove();
-            document.getElementById('maze_output').remove();
-            endGame();
             Maze = new MazeBuilder(16, 12);
             Maze.placeKey();
             Maze.display("maze_container");
-            maze = new Mazing("maze");
-            startGame();
+            maze.mazeContainer = document.getElementById('maze');
+            maze.maze = [];
+            maze.heroPos = {};
+            maze.heroHasKey = false;
+            maze.childMode = false;
+            for (i = 0; i < maze.mazeContainer.children.length; i++) {
+                for (j = 0; j < maze.mazeContainer.children[i].children.length; j++) {
+                    var el = maze.mazeContainer.children[i].children[j];
+                    maze.maze[new Position(i, j)] = el;
+                    if (el.classList.contains("entrance")) {
+                        // place hero at entrance
+                        maze.heroPos = new Position(i, j);
+                        maze.maze[maze.heroPos].classList.add("hero");
+                    }
+                }
+            }
+            Level++;
+            document.getElementById("maze_level").innerHTML = "Level: " + Level;
+            now = now - 20;
+            maze.setMessage("Find the water bucket");
+            maze.mazeScore.innerHTML = maze.heroScore;
+            ClapsSound.stop();
         }
         $(".swal2-modal").css('background-color', 'rgb(59 108 0)');
 
-        function sound(src) {
+        function sound(src, loop) {
             this.sound = document.createElement("audio");
             this.sound.src = src;
             this.sound.setAttribute("preload", "auto");
             this.sound.setAttribute("controls", "none");
             this.sound.style.display = "none";
             this.sound.setAttribute("allow", "autoplay");
+            if (loop)
+                this.sound.setAttribute("loop", "loop");
             document.body.appendChild(this.sound);
             this.play = function() {
                 this.sound.play();

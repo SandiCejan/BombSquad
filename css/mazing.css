@@ -31,9 +31,11 @@
 }
 
 #maze div div.door.exit {
-    background-image: url('../img/bomb.png');
-    background-size: 100%;
+    background-image: url(../img/bomb1.png);
+    background-size: contain;
     background-repeat: no-repeat;
+    background-position-x: 3px;
+    background-position-y: -2px;
 }
 
 #maze div div.nubbin::after {
@@ -58,7 +60,7 @@
 
 #maze div.hero {
     background-image: url('../img/soldier.png');
-    background-size: 100%;
+    background-size: contain;
     background-repeat: no-repeat;
 }
 
@@ -90,17 +92,9 @@
 }
 
 #maze div div.key {
-    background-image: url('../img/Code.png');
-    background-size: 100%;
+    background: url(../img/water.png) center center;
+    background-size: contain;
     background-repeat: no-repeat;
-}
-
-#maze div div:nth-child(odd) {
-    width: 30px;
-}
-
-#maze div:nth-child(odd) div {
-    height: 30px;
 }
 
 #maze.finished::after {

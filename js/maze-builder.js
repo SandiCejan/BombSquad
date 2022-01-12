@@ -249,10 +249,6 @@ class MazeBuilder {
             return false;
         }
 
-        while (this.parentDiv.firstChild) {
-            this.parentDiv.removeChild(this.parentDiv.firstChild);
-        }
-
         const container = document.createElement("div");
         container.id = "maze";
         container.dataset.steps = this.totalSteps;
@@ -269,7 +265,7 @@ class MazeBuilder {
             container.appendChild(rowDiv);
         });
 
-        this.parentDiv.appendChild(container);
+        this.parentDiv.insertBefore(container, this.parentDiv.firstChild);
 
         return true;
     }

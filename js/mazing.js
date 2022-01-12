@@ -18,6 +18,12 @@ function Mazing(id) {
     this.mazeMessage = document.createElement("div");
     this.mazeMessage.id = "maze_message";
 
+    this.mazeTimer = document.createElement("div");
+    this.mazeTimer.id = "maze_timer";
+
+    this.mazeLevel = document.createElement("div");
+    this.mazeLevel.id = "maze_level";
+    this.mazeLevel.innerHTML = "Level: 1";
     this.heroScore = 0;
 
     this.maze = [];
@@ -40,22 +46,21 @@ function Mazing(id) {
     }
 
     var mazeOutputDiv = document.createElement("div");
-    mazeOutputDiv.id = "maze_output";
+    mazeOutputDiv.id = "maze_output1";
+    mazeOutputDiv.className = "Bottom";
+    var mazeOutputDiv2 = document.createElement("div");
+    mazeOutputDiv2.id = "maze_output2";
+    mazeOutputDiv2.className = "Bottom";
 
-    mazeOutputDiv.appendChild(this.mazeScore);
-    this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
-    const container2 = document.createElement("div");
-    container2.id = "More";
-    const Timep = document.createElement("p");
-    Timep.id = "Time";
-    Timep.innerHTML = "Detonation in:2m 0s";
-    mazeOutputDiv.appendChild(container2);
-    container2.appendChild(Timep);
+    mazeOutputDiv.appendChild(this.mazeTimer);
     mazeOutputDiv.appendChild(this.mazeMessage);
 
-    this.setMessage("Find the code");
+    mazeOutputDiv2.appendChild(this.mazeScore);
+    mazeOutputDiv2.appendChild(this.mazeLevel);
+    this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv2);
+    this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
-
+    this.setMessage("Find the water bucket");
 
     // activate control keys
     this.keyPressHandler = this.mazeKeyPressHandler.bind(this);
@@ -91,8 +96,7 @@ Mazing.prototype.gameOver = function(text) {
 Mazing.prototype.heroWins = function() {
     this.mazeScore.classList.remove("has-key");
     this.maze[this.heroPos].classList.remove("door");
-    ClapsSound.play();
-    this.gameOver("you finished !!!");
+    regenerate();
 };
 
 Mazing.prototype.tryMoveHero = function(pos) {
@@ -111,8 +115,9 @@ Mazing.prototype.tryMoveHero = function(pos) {
     if (nextStep.match(/exit/)) {
         if (this.heroHasKey) {
             this.heroWins();
+            return;
         } else {
-            this.setMessage("you need a key to unlock the door");
+            this.setMessage("you need a water bucket to deactivate the bomb");
             return;
         }
     }
