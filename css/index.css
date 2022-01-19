@@ -17,6 +17,10 @@ body {
     height: 750px;
 }
 
+.swal2-header {
+    padding: 0 !important;
+}
+
 .swal2-styled {
     border: 0;
     border-radius: 0.25em;
@@ -28,7 +32,7 @@ body {
 
 #swal2-content {
     color: white;
-    font-family: sans-serif;
+    font-family: cursive !important;
 }
 
 #swal2-title {
@@ -51,9 +55,13 @@ body {
     flex: 5;
 }
 
-.swal2-popup {
-    background-color: #a7c53f;
-    font-family: sans-serif;
+h5 {
+    color: white;
+    font-size: 26px;
+    padding: 0 !important;
+    font-weight: 900;
+    margin: 20px 0;
+    font-family: cursive;
 }
 
 #finish {
@@ -153,18 +161,25 @@ body {
     display: flex;
 }
 
+h1 {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin: 0;
+}
+
 @media(max-width: 1190px) {
-    #maze div div:nth-child(odd) {
+    #maze div div {
         width: 20px;
-    }
-    #maze div:nth-child(odd) div {
-        height: 20px;
     }
     #maze div div {
         width: 20px;
     }
     #maze_container {
         width: 660px;
+    }
+    #exit {
+        width: 20px;
     }
 }
 
@@ -173,6 +188,9 @@ body {
         height: 500px;
     }
     #maze div div {
+        height: 20px;
+    }
+    #exit {
         height: 20px;
     }
 }

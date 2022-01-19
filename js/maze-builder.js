@@ -258,7 +258,15 @@ class MazeBuilder {
             row.forEach((cell) => {
                 let cellDiv = document.createElement("div");
                 if (cell) {
-                    cellDiv.className = cell.join(" ");
+                    if (cell.includes("exit")) {
+                        cellDiv = document.createElement("canvas");
+                        cellDiv.id = "exit";
+                        cellDiv.setAttribute("width", "111");
+                        cellDiv.setAttribute("height", "200");
+                        cellDiv.className = "exit";
+                    } else {
+                        cellDiv.className = cell.join(" ");
+                    }
                 }
                 rowDiv.appendChild(cellDiv);
             });

@@ -96,6 +96,7 @@ Mazing.prototype.gameOver = function(text) {
 Mazing.prototype.heroWins = function() {
     this.mazeScore.classList.remove("has-key");
     this.maze[this.heroPos].classList.remove("door");
+    FireExteng();
     regenerate();
 };
 
@@ -112,7 +113,7 @@ Mazing.prototype.tryMoveHero = function(pos) {
     if (nextStep.match(/wall/)) {
         return;
     }
-    if (nextStep.match(/exit/)) {
+    if (nextStep == "exit") {
         if (this.heroHasKey) {
             this.heroWins();
             return;
@@ -124,7 +125,8 @@ Mazing.prototype.tryMoveHero = function(pos) {
 
     // move hero one step
     this.maze[this.heroPos].classList.remove("hero");
-    this.maze[pos].classList.add("hero");
+    this.maze[this.heroPos].classList.remove("heroWater");
+    this.maze[pos].classList.add(this.heroHasKey ? "heroWater" : "hero");
     this.heroPos = pos;
 
     // after moving
@@ -134,6 +136,8 @@ Mazing.prototype.tryMoveHero = function(pos) {
     }
     if (nextStep.match(/key/)) {
         this.heroTakeKey();
+        this.maze[this.heroPos].classList.remove("hero");
+        this.maze[pos].classList.add("heroWater");
         return;
     }
     if (nextStep.match(/exit/)) {

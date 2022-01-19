@@ -30,6 +30,11 @@
     z-index: 10;
 }
 
+#exit {
+    width: 30px;
+    height: 30px;
+}
+
 #maze div div.door.exit {
     background-image: url(../img/bomb1.png);
     background-size: contain;
@@ -60,6 +65,12 @@
 
 #maze div.hero {
     background-image: url('../img/soldier.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#maze div.heroWater {
+    background-image: url('../img/soldierWater.png');
     background-size: contain;
     background-repeat: no-repeat;
 }
