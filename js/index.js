@@ -79,7 +79,12 @@ function startGame() {
                         regenerate();
                         startGame();
                     })
-                    $(".swal2-modal").css('background-color', 'rgb(59 108 0)');
+                    $(".swal2-modal").css('background', 'url("img/grass1.jpg")');
+                    $(".swal2-html-container").css('font-family', 'cursive');
+                    $(".swal2-confirm").css('background', 'url("img/wall.png")');
+                    $(".swal2-confirm").css('color', 'white');
+                    $(".swal2-confirm").css('border', 'white 1px solid');
+                    $(".swal2-confirm").css('font-weight', '600');
                 } else {
                     TimeLastSound.play();
                 }
